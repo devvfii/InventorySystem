@@ -12,18 +12,29 @@ namespace InventorySystem
 {
     public partial class LoginForm : Form
     {
+        LoginDAO loginDAO;
         public LoginForm()
         {
             InitializeComponent();
+            loginDAO = new LoginDAO();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            // login check with textbox 1 and 2
-            // get user info as object and pass onto homepage
-            HomePage home = new HomePage();
-            home.Show();
-            this.Hide();
+            if (loginDAO.verify_login(textBox1.Text, textBox2.Text))
+            {
+                // get user info as object and pass onto homepage
+                HomePage home = new HomePage();
+                home.logged_user = loginDAO.user_details;
+                home.Show();
+                this.Hide();
+            }
+            else
+            {
+                MessageBox.Show("Login details invalid");
+                textBox2.Clear();
+            }
+            
         }
 
         private void button2_Click(object sender, EventArgs e)

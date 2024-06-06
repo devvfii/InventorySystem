@@ -87,6 +87,7 @@ namespace InventorySystem
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(214, 23);
             this.textBox2.TabIndex = 3;
+            this.textBox2.UseSystemPasswordChar = true;
             // 
             // textBox1
             // 

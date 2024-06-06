@@ -139,6 +139,7 @@ namespace InventorySystem
             this.Controls.Add(this.button1);
             this.Name = "HomePage";
             this.Text = "HomePage";
+            this.Load += new System.EventHandler(this.HomePage_Load);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 

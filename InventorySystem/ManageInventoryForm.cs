@@ -14,8 +14,7 @@ namespace InventorySystem
 {
     public partial class ManageInventoryForm : Form
     {
-        MySqlConnection connection;
-        MySqlCommand command;
+        BindingSource inventoryBindingSource = new BindingSource();
         public ManageInventoryForm()
         {
             InitializeComponent();
@@ -23,21 +22,7 @@ namespace InventorySystem
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            connection = new MySqlConnection("server=localhost;userid=root;password='d28018d6ba!';database=system");
-
-            try
-            {
-                System.Diagnostics.Debug.WriteLine("Connecting to MySQL...");
-                connection.Open();
-                System.Diagnostics.Debug.WriteLine("Successful");
-            }
-            catch(Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine("Error");
-                System.Diagnostics.Debug.WriteLine(ex.ToString());
-            }
-            connection.Close();
-            System.Diagnostics.Debug.WriteLine("Done.");
+            
         }
 
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
@@ -71,7 +56,66 @@ namespace InventorySystem
         private void button2_Click(object sender, EventArgs e)
         {
             textBox1.Clear();
-            //unselect any from datagridview
+
+            dataGridView1.ClearSelection();
+            //clear info from information panel too
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            // dummy data
+            InventoryDAO inventoryDAO = new InventoryDAO();
+            ActiveInventoryItems a1 = new ActiveInventoryItems
+            {
+                ItemID = 1,
+                ItemCode = "000 000",
+                ItemName = "Test1",
+                DisplayName = "Display1",
+                Description = "For Testing",
+                DateAdded = "05-20-2024",
+                DP = 100,
+                SRP = 150,
+                VAT = 0.12,
+                EffectivePrice = 150 / (1 - 0.12),
+                Quantity = 10
+            };
+            ActiveInventoryItems a2 = new ActiveInventoryItems
+            {
+                ItemID = 2,
+                ItemCode = "000 001",
+                ItemName = "Test2",
+                DisplayName = "Display2",
+                Description = "For Testing",
+                DateAdded = "05-20-2024",
+                DP = 200,
+                SRP = 250,
+                VAT = 0.12,
+                EffectivePrice = 250 / (1 - 0.12),
+                Quantity = 40
+            };
+
+            inventoryDAO.inventory.Add(a1);
+            inventoryDAO.inventory.Add(a2);
+
+            // connect list to grid view
+            inventoryBindingSource.DataSource = inventoryDAO.inventory;
+            dataGridView1.DataSource = inventoryBindingSource;
+            dataGridView1.Select();
+        }
+
+        private void dataGridView1_SelectionChanged(object sender, EventArgs e)
+        {
+            
+            if (dataGridView1.SelectedRows.Count > 0)
+            {
+                DataGridViewRow row = dataGridView1.SelectedRows[0];
+                textBox7.Text = row.Cells[0].Value.ToString();
+            }
+            else
+            {
+                textBox7.Text = "empty";
+            }
+
         }
     }
 }
